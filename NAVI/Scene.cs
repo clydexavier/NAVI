@@ -25,15 +25,6 @@ namespace NAVI
             this.Name = name;
             this.SceneImage = scene_image;
             this.ImageData = null;
-            
-            /*using (MemoryStream stream = new MemoryStream())
-            {
-                SceneImage.Save(stream, SceneImage.RawFormat);
-                ImageData = stream.ToArray();
-            }*/
         }
-
-        
-
     }
 }
