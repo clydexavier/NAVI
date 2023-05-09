@@ -29,13 +29,12 @@
         private void InitializeComponent()
         {
             this.HeadingPanel = new System.Windows.Forms.Panel();
-            this.LabelTitle = new System.Windows.Forms.Label();
-            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.ButtonAddDataPoints = new System.Windows.Forms.Button();
             this.ButtonHolder = new System.Windows.Forms.Panel();
-            this.ButtonRemoveDataPoints = new System.Windows.Forms.Button();
             this.ButtonAddImage = new System.Windows.Forms.Button();
             this.ButtonRemoveImage = new System.Windows.Forms.Button();
+            this.ButtonRemoveDataPoints = new System.Windows.Forms.Button();
+            this.ButtonAddDataPoints = new System.Windows.Forms.Button();
+            this.LabelTitle = new System.Windows.Forms.Label();
             this.PBMapContainer = new System.Windows.Forms.PictureBox();
             this.HeadingPanel.SuspendLayout();
             this.ButtonHolder.SuspendLayout();
@@ -53,27 +52,6 @@
             this.HeadingPanel.Size = new System.Drawing.Size(1000, 50);
             this.HeadingPanel.TabIndex = 0;
             // 
-            // LabelTitle
-            // 
-            this.LabelTitle.Dock = System.Windows.Forms.DockStyle.Left;
-            this.LabelTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelTitle.ForeColor = System.Drawing.SystemColors.Control;
-            this.LabelTitle.Location = new System.Drawing.Point(0, 0);
-            this.LabelTitle.Name = "LabelTitle";
-            this.LabelTitle.Size = new System.Drawing.Size(252, 50);
-            this.LabelTitle.TabIndex = 0;
-            this.LabelTitle.Text = "Navi Map Manager";
-            this.LabelTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // ButtonAddDataPoints
-            // 
-            this.ButtonAddDataPoints.Location = new System.Drawing.Point(278, 10);
-            this.ButtonAddDataPoints.Name = "ButtonAddDataPoints";
-            this.ButtonAddDataPoints.Size = new System.Drawing.Size(100, 30);
-            this.ButtonAddDataPoints.TabIndex = 1;
-            this.ButtonAddDataPoints.Text = "Add Data Points";
-            this.ButtonAddDataPoints.UseVisualStyleBackColor = true;
-            // 
             // ButtonHolder
             // 
             this.ButtonHolder.Controls.Add(this.ButtonAddImage);
@@ -85,15 +63,6 @@
             this.ButtonHolder.Name = "ButtonHolder";
             this.ButtonHolder.Size = new System.Drawing.Size(541, 50);
             this.ButtonHolder.TabIndex = 2;
-            // 
-            // ButtonRemoveDataPoints
-            // 
-            this.ButtonRemoveDataPoints.Location = new System.Drawing.Point(400, 10);
-            this.ButtonRemoveDataPoints.Name = "ButtonRemoveDataPoints";
-            this.ButtonRemoveDataPoints.Size = new System.Drawing.Size(120, 30);
-            this.ButtonRemoveDataPoints.TabIndex = 2;
-            this.ButtonRemoveDataPoints.Text = "Remove Data Points";
-            this.ButtonRemoveDataPoints.UseVisualStyleBackColor = true;
             // 
             // ButtonAddImage
             // 
@@ -112,6 +81,36 @@
             this.ButtonRemoveImage.TabIndex = 4;
             this.ButtonRemoveImage.Text = "Remove Image";
             this.ButtonRemoveImage.UseVisualStyleBackColor = true;
+            // 
+            // ButtonRemoveDataPoints
+            // 
+            this.ButtonRemoveDataPoints.Location = new System.Drawing.Point(400, 10);
+            this.ButtonRemoveDataPoints.Name = "ButtonRemoveDataPoints";
+            this.ButtonRemoveDataPoints.Size = new System.Drawing.Size(120, 30);
+            this.ButtonRemoveDataPoints.TabIndex = 2;
+            this.ButtonRemoveDataPoints.Text = "Remove Data Points";
+            this.ButtonRemoveDataPoints.UseVisualStyleBackColor = true;
+            // 
+            // ButtonAddDataPoints
+            // 
+            this.ButtonAddDataPoints.Location = new System.Drawing.Point(278, 10);
+            this.ButtonAddDataPoints.Name = "ButtonAddDataPoints";
+            this.ButtonAddDataPoints.Size = new System.Drawing.Size(100, 30);
+            this.ButtonAddDataPoints.TabIndex = 1;
+            this.ButtonAddDataPoints.Text = "Add Data Points";
+            this.ButtonAddDataPoints.UseVisualStyleBackColor = true;
+            // 
+            // LabelTitle
+            // 
+            this.LabelTitle.Dock = System.Windows.Forms.DockStyle.Left;
+            this.LabelTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelTitle.ForeColor = System.Drawing.SystemColors.Control;
+            this.LabelTitle.Location = new System.Drawing.Point(0, 0);
+            this.LabelTitle.Name = "LabelTitle";
+            this.LabelTitle.Size = new System.Drawing.Size(252, 50);
+            this.LabelTitle.TabIndex = 0;
+            this.LabelTitle.Text = "Navi Map Manager";
+            this.LabelTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // PBMapContainer
             // 
@@ -148,7 +147,6 @@
         private System.Windows.Forms.Button ButtonRemoveImage;
         private System.Windows.Forms.Button ButtonRemoveDataPoints;
         private System.Windows.Forms.Button ButtonAddDataPoints;
-        private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.Windows.Forms.PictureBox PBMapContainer;
     }
 }
