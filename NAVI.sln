@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NAVI", "NAVI\NAVI.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NaviGUI", "NaviGUI\NaviGUI.csproj", "{5061589D-C7EA-4877-9D98-150DEDBA25FE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RUN", "RUN\RUN.csproj", "{43680E5F-AFE8-4D69-886F-BBE66BD7B3A4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +19,17 @@ Global
 		{C93810EC-7CA8-4301-A2B9-6660AFA90254}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C93810EC-7CA8-4301-A2B9-6660AFA90254}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C93810EC-7CA8-4301-A2B9-6660AFA90254}.Release|Any CPU.Build.0 = Release|Any CPU
+<<<<<<< Updated upstream
 		{5061589D-C7EA-4877-9D98-150DEDBA25FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5061589D-C7EA-4877-9D98-150DEDBA25FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5061589D-C7EA-4877-9D98-150DEDBA25FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5061589D-C7EA-4877-9D98-150DEDBA25FE}.Release|Any CPU.Build.0 = Release|Any CPU
+=======
+		{43680E5F-AFE8-4D69-886F-BBE66BD7B3A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43680E5F-AFE8-4D69-886F-BBE66BD7B3A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43680E5F-AFE8-4D69-886F-BBE66BD7B3A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43680E5F-AFE8-4D69-886F-BBE66BD7B3A4}.Release|Any CPU.Build.0 = Release|Any CPU
+>>>>>>> Stashed changes
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
