@@ -16,7 +16,7 @@ namespace NaviGUI
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainPanel());
+            Application.Run(new NAVI());
         }
     }
 }
