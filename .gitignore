@@ -58,6 +58,7 @@ dlldata.c
 # Benchmark Results
 BenchmarkDotNet.Artifacts/
 
+*.sln
 # .NET Core
 project.lock.json
 project.fragment.lock.json
@@ -97,6 +98,7 @@ StyleCopReport.xml
 *.pidb
 *.svclog
 *.scc
+*.csproj
 
 # Chutzpah Test files
 _Chutzpah*
