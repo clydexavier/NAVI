@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Collections;
 using System.Text.Json;
+using Newtonsoft.Json;
 //using System.Net.Mime.MediaTypeNames;
 
 
@@ -15,7 +16,7 @@ namespace NAVI
     public class Scene
     {
         public string Name;
-
+        [JsonIgnore]
         public Image SceneImage { get; set; }
         public byte[] ImageData;
 
@@ -23,11 +24,13 @@ namespace NAVI
         {
             this.Name = name;
             this.SceneImage = scene_image;
-            using (MemoryStream stream = new MemoryStream())
+            this.ImageData = null;
+            
+            /*using (MemoryStream stream = new MemoryStream())
             {
                 SceneImage.Save(stream, SceneImage.RawFormat);
                 ImageData = stream.ToArray();
-            }
+            }*/
         }
 
         
