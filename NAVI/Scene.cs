@@ -18,13 +18,20 @@ namespace NAVI
         public string Name;
         [JsonIgnore]
         public Image SceneImage { get; set; }
-        public byte[] ImageData;
+        public byte[]? ImageData;
+        public List<DataPoint> DataPoints;
 
         public Scene(Image scene_image, string name)
         {
             this.Name = name;
             this.SceneImage = scene_image;
             this.ImageData = null;
+            this.DataPoints = new List<DataPoint>();
+        }
+
+        public override string ToString()
+        {
+            return this.Name; 
         }
     }
 }
