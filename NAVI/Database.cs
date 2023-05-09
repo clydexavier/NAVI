@@ -4,7 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+<<<<<<< HEAD
 
+=======
+>>>>>>> add Database.cs
 using System.Drawing;
 using System.Resources;
 /*
