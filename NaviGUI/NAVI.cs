@@ -15,6 +15,8 @@ namespace NaviGUI
         public NAVI()
         {
             InitializeComponent();
+            this.WindowState = FormWindowState.Maximized;
+            this.StartPosition = FormStartPosition.CenterScreen;
         }
     }
 }
