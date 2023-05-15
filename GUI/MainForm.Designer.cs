@@ -29,8 +29,11 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
-            this.listBox1 = new System.Windows.Forms.ListBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.UndoButton = new System.Windows.Forms.Button();
+            this.DatapointButton = new System.Windows.Forms.Button();
+            this.listBox1 = new System.Windows.Forms.ListBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sceneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -38,39 +41,28 @@
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveAsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.scenesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataPointsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ofd = new System.Windows.Forms.OpenFileDialog();
             this.sfd = new System.Windows.Forms.SaveFileDialog();
+            this.ConnectButton = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.panel2.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.listBox1);
             this.panel1.Controls.Add(this.pictureBox1);
+            this.panel1.Controls.Add(this.panel2);
             this.panel1.Controls.Add(this.menuStrip1);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(800, 450);
+            this.panel1.Size = new System.Drawing.Size(800, 447);
             this.panel1.TabIndex = 0;
-            // 
-            // listBox1
-            // 
-            this.listBox1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.ItemHeight = 15;
-            this.listBox1.Location = new System.Drawing.Point(600, 24);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(200, 426);
-            this.listBox1.TabIndex = 4;
-            this.listBox1.Visible = false;
-            this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 
             // pictureBox1
             // 
@@ -78,11 +70,60 @@
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox1.Location = new System.Drawing.Point(0, 24);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(800, 426);
-            this.pictureBox1.TabIndex = 1;
+            this.pictureBox1.Size = new System.Drawing.Size(600, 423);
+            this.pictureBox1.TabIndex = 3;
             this.pictureBox1.TabStop = false;
             this.pictureBox1.Visible = false;
             this.pictureBox1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseClick);
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.ConnectButton);
+            this.panel2.Controls.Add(this.UndoButton);
+            this.panel2.Controls.Add(this.DatapointButton);
+            this.panel2.Controls.Add(this.listBox1);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panel2.Location = new System.Drawing.Point(600, 24);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(200, 423);
+            this.panel2.TabIndex = 2;
+            // 
+            // UndoButton
+            // 
+            this.UndoButton.Dock = System.Windows.Forms.DockStyle.Left;
+            this.UndoButton.Location = new System.Drawing.Point(69, 394);
+            this.UndoButton.Name = "UndoButton";
+            this.UndoButton.Size = new System.Drawing.Size(59, 29);
+            this.UndoButton.TabIndex = 7;
+            this.UndoButton.Text = "Undo";
+            this.UndoButton.UseVisualStyleBackColor = true;
+            this.UndoButton.Visible = false;
+            this.UndoButton.Click += new System.EventHandler(this.UndoButton_Click);
+            // 
+            // DatapointButton
+            // 
+            this.DatapointButton.Dock = System.Windows.Forms.DockStyle.Left;
+            this.DatapointButton.Location = new System.Drawing.Point(0, 394);
+            this.DatapointButton.Name = "DatapointButton";
+            this.DatapointButton.Size = new System.Drawing.Size(69, 29);
+            this.DatapointButton.TabIndex = 6;
+            this.DatapointButton.Text = "Add DP";
+            this.DatapointButton.UseVisualStyleBackColor = true;
+            this.DatapointButton.Visible = false;
+            this.DatapointButton.Click += new System.EventHandler(this.DatapointButton_Click);
+            // 
+            // listBox1
+            // 
+            this.listBox1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.ItemHeight = 15;
+            this.listBox1.Location = new System.Drawing.Point(0, 0);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.ScrollAlwaysVisible = true;
+            this.listBox1.Size = new System.Drawing.Size(200, 394);
+            this.listBox1.TabIndex = 5;
+            this.listBox1.Visible = false;
+            this.listBox1.DoubleClick += new System.EventHandler(this.listBox1_DoubleClick);
             // 
             // menuStrip1
             // 
@@ -101,8 +142,7 @@
             this.sceneToolStripMenuItem,
             this.saveToolStripMenuItem,
             this.openToolStripMenuItem,
-            this.saveAsToolStripMenuItem,
-            this.saveAsToolStripMenuItem1});
+            this.saveAsToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
@@ -143,12 +183,6 @@
             this.saveAsToolStripMenuItem.Text = "Save as";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
-            // saveAsToolStripMenuItem1
-            // 
-            this.saveAsToolStripMenuItem1.Name = "saveAsToolStripMenuItem1";
-            this.saveAsToolStripMenuItem1.Size = new System.Drawing.Size(112, 22);
-            this.saveAsToolStripMenuItem1.Text = "Save as";
-            // 
             // viewToolStripMenuItem
             // 
             this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -170,16 +204,27 @@
             this.dataPointsToolStripMenuItem.Name = "dataPointsToolStripMenuItem";
             this.dataPointsToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
             this.dataPointsToolStripMenuItem.Text = "DataPoints";
+            this.dataPointsToolStripMenuItem.Click += new System.EventHandler(this.dataPointsToolStripMenuItem_Click);
             // 
             // ofd
             // 
             this.ofd.FileName = "openFileDialog1";
             // 
+            // ConnectButton
+            // 
+            this.ConnectButton.Dock = System.Windows.Forms.DockStyle.Left;
+            this.ConnectButton.Location = new System.Drawing.Point(128, 394);
+            this.ConnectButton.Name = "ConnectButton";
+            this.ConnectButton.Size = new System.Drawing.Size(69, 29);
+            this.ConnectButton.TabIndex = 8;
+            this.ConnectButton.Text = "Connect";
+            this.ConnectButton.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(829, 447);
             this.Controls.Add(this.panel1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
@@ -187,6 +232,7 @@
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.panel2.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -196,7 +242,6 @@
         #endregion
 
         private Panel panel1;
-        private PictureBox pictureBox1;
         private MenuStrip menuStrip1;
         private ToolStripMenuItem fileToolStripMenuItem;
         private ToolStripMenuItem sceneToolStripMenuItem;
@@ -209,7 +254,11 @@
         private ToolStripMenuItem scenesToolStripMenuItem;
         private ToolStripMenuItem dataPointsToolStripMenuItem;
         private ToolStripMenuItem saveAsToolStripMenuItem;
-        private ToolStripMenuItem saveAsToolStripMenuItem1;
+        private Panel panel2;
         private ListBox listBox1;
+        private PictureBox pictureBox1;
+        private Button UndoButton;
+        private Button DatapointButton;
+        private Button ConnectButton;
     }
 }
