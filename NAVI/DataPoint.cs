@@ -19,5 +19,11 @@ namespace NAVI
         {
             return this.Name;
         }
+
+        public override bool Equals(object? obj)
+        {
+            return (obj is string && obj.Equals(this.Name)) || (obj is DataPoint);
+        }
+
     }
 }
