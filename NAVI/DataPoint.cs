@@ -1,16 +1,18 @@
-﻿namespace NAVI
+﻿using System.Drawing;
+
+namespace NAVI
 {
     public class DataPoint
     {
-        public double X { get; set; }
-        public double Y { get; set; }
+        public PointF Location { get; set; }
         public string Name { get; set; }
+        public bool IsMain { get; set; }
 
-        public DataPoint(double x, double y, string name)
+        public DataPoint(PointF location, string name, bool isMain)
         {
-            this.X = x;
-            this.Y = y;
+            this.Location = location;
             this.Name = name;
+            this.IsMain = isMain;
         }
     }
 }
