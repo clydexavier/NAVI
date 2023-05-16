@@ -14,5 +14,10 @@ namespace NAVI
             this.Name = name;
             this.IsMain = isMain;
         }
+
+        public override string ToString()
+        {
+            return this.Name;
+        }
     }
 }

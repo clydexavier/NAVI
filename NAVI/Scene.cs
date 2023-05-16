@@ -8,7 +8,6 @@ using System.Drawing.Imaging;
 using System.Collections;
 using System.Text.Json;
 using Newtonsoft.Json;
-//using System.Net.Mime.MediaTypeNames;
 
 
 namespace NAVI
