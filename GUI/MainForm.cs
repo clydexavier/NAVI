@@ -35,6 +35,7 @@ namespace GUI
                 panel2.Visible = true;
                 UndoButton.Visible = true;
                 DatapointButton.Visible = true;
+                ConnectButton.Visible = true;
             } 
         }
 
@@ -77,6 +78,7 @@ namespace GUI
                 listBox1.Visible = true;
                 UndoButton.Visible = true;
                 DatapointButton.Visible = true;
+                ConnectButton.Visible = true;
             }
         }
         private void pictureBox1_MouseClick(object sender, MouseEventArgs e)
@@ -95,15 +97,21 @@ namespace GUI
             float x_location = (float)e.X / scaleX;
             float y_location = (float)e.Y / scaleY;
 
-            PointF click = new PointF(x_location, y_location);
+
+            
+            PointF click = new PointF(x_location , y_location);
 
             //prompts the user to input the name of the newly added DataPoint
-            string name = Microsoft.VisualBasic.Interaction.InputBox("Enter a name: ", "DataPoint name");
+            string name = Microsoft.VisualBasic.Interaction.InputBox("Enter a name: ", "Add Datapoint");
+            DialogResult result = MessageBox.Show("Is this a main Datapoint?", "Add Datapoint", MessageBoxButtons.YesNoCancel);
+
+            if (result == DialogResult.Cancel) return;
+
             //MessageBox.Show(click.X.ToString() + " " + click.Y.ToString());
             //MessageBox.Show(e.Location.ToString());
 
             //creation of the new DataPoint objects
-            DataPoint dp = new DataPoint(click, name, false);
+            DataPoint dp = new DataPoint(click, name, result == DialogResult.Yes);
 
             //add the new DataPoint to the list of DataPoints
             #pragma warning disable CS8602 // Dereference of a possibly null reference.
@@ -113,15 +121,31 @@ namespace GUI
             pictureBox1.Image = selectedScene.SceneImage;
 
             Image i = new Bitmap(selectedScene.SceneImage);
+            Font font = new Font("Arial", 6);
+
 
             //Image i = new Bitmap(selectedScene.SceneImage.Width, selectedScene.SceneImage.Height);
             using (Graphics g = Graphics.FromImage(i))
             {
-                Brush brush = new SolidBrush(Color.Red);
+                //Brush brush = new SolidBrush(Color.Red);
                 //paints a red dot to all the DataPoints
                 foreach (DataPoint p in selectedScene.DataPoints)
                 {
-                    g.FillEllipse(brush, new Rectangle((int)p.Location.X, (int)p.Location.Y, 3, 3));
+                    float scale = pictureBox1.Width * 0.025f / 2;
+                    PointF corrected = new PointF(p.Location.X - scale, p.Location.Y - scale);
+                    if (p.IsMain)
+                    {
+                      
+                       // g.DrawString("x: " + p.Location.X.ToString() + "\ny: " + p.Location.Y, Font.Name, p.Location.X, p.Location.Y + 5);
+                        g.FillEllipse(Brushes.Red, new RectangleF(corrected, new SizeF(2*scale, 2*scale)));
+                        g.DrawString("x: " + p.Location.X.ToString() + "\ny: " + p.Location.Y, font, Brushes.Black, p.Location.X, p.Location.Y + 5);
+                    }
+                    else
+                    {
+                        g.FillEllipse(Brushes.DarkGreen, new RectangleF(corrected, new SizeF(2 * scale, 2 * scale)));
+                        g.DrawString("x: " + p.Location.X.ToString() + "\ny: " + p.Location.Y, font, Brushes.Black, p.Location.X, p.Location.Y + 5);
+                    }
+                       
                 }
             }
             //refreshes the image that is being displayed in the PictureBox
@@ -156,15 +180,34 @@ namespace GUI
                 pictureBox1.Visible = true;
                 UndoButton.Visible = true;
                 DatapointButton.Visible = true;
+                ConnectButton.Visible = true;
 
                 Image i = new Bitmap(selectedScene.SceneImage);
+                Font font = new Font("Arial", 6);
+
+
+                //Image i = new Bitmap(selectedScene.SceneImage.Width, selectedScene.SceneImage.Height);
                 using (Graphics g = Graphics.FromImage(i))
                 {
-                    Brush brush = new SolidBrush(Color.Red);
+                    //Brush brush = new SolidBrush(Color.Red);
                     //paints a red dot to all the DataPoints
                     foreach (DataPoint p in selectedScene.DataPoints)
                     {
-                        g.FillEllipse(brush, new Rectangle((int)p.Location.X, (int)p.Location.Y, 3, 3));
+                        float scale = pictureBox1.Width * 0.025f / 2;
+                        PointF corrected = new PointF(p.Location.X - scale, p.Location.Y - scale);
+                        if (p.IsMain)
+                        {
+
+                            // g.DrawString("x: " + p.Location.X.ToString() + "\ny: " + p.Location.Y, Font.Name, p.Location.X, p.Location.Y + 5);
+                            g.FillEllipse(Brushes.Red, new RectangleF(corrected, new SizeF(2 * scale, 2 * scale)));
+                            g.DrawString("x: " + p.Location.X.ToString() + "\ny: " + p.Location.Y, font, Brushes.Black, p.Location.X, p.Location.Y + 5);
+                        }
+                        else
+                        {
+                            g.FillEllipse(Brushes.DarkGreen, new RectangleF(corrected, new SizeF(2 * scale, 2 * scale)));
+                            g.DrawString("x: " + p.Location.X.ToString() + "\ny: " + p.Location.Y, font, Brushes.Black, p.Location.X, p.Location.Y + 5);
+                        }
+
                     }
                 }
                 //refreshes the image that is being displayed in the PictureBox
@@ -184,7 +227,8 @@ namespace GUI
             panel2.Visible = true;
             UndoButton.Visible = true;
             DatapointButton.Visible = true;
-            
+            ConnectButton.Visible = true;
+        
             #pragma warning restore CS8602 // Dereference of a possibly null reference.
         }
 
@@ -208,15 +252,31 @@ namespace GUI
             if (selectedScene == null || selectedScene.DataPoints.Count <= 0) return;
 
             Image i = new Bitmap(selectedScene.SceneImage);
+            Font font = new Font("Arial", 6);
+
             selectedScene.DataPoints.RemoveAt(selectedScene.DataPoints.Count - 1);
+            //Image i = new Bitmap(selectedScene.SceneImage.Width, selectedScene.SceneImage.Height);
             using (Graphics g = Graphics.FromImage(i))
             {
-                Brush brush = new SolidBrush(Color.Red);
-
+                //Brush brush = new SolidBrush(Color.Red);
                 //paints a red dot to all the DataPoints
                 foreach (DataPoint p in selectedScene.DataPoints)
                 {
-                    g.FillEllipse(brush, new Rectangle((int)p.Location.X, (int)p.Location.Y, 3, 3));
+                    float scale = pictureBox1.Width * 0.025f / 2;
+                    PointF corrected = new PointF(p.Location.X - scale, p.Location.Y - scale);
+                    if (p.IsMain)
+                    {
+
+                        // g.DrawString("x: " + p.Location.X.ToString() + "\ny: " + p.Location.Y, Font.Name, p.Location.X, p.Location.Y + 5);
+                        g.FillEllipse(Brushes.Red, new RectangleF(corrected, new SizeF(2 * scale, 2 * scale)));
+                        g.DrawString("x: " + p.Location.X.ToString() + "\ny: " + p.Location.Y, font, Brushes.Black, p.Location.X, p.Location.Y + 5);
+                    }
+                    else
+                    {
+                        g.FillEllipse(Brushes.DarkGreen, new RectangleF(corrected, new SizeF(2 * scale, 2 * scale)));
+                        g.DrawString("x: " + p.Location.X.ToString() + "\ny: " + p.Location.Y, font, Brushes.Black, p.Location.X, p.Location.Y + 5);
+                    }
+
                 }
             }
             //refreshes the image that is being displayed in the PictureBox
