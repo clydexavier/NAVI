@@ -1,15 +1,46 @@
 using NAVI;
+using System.Drawing.Drawing2D;
 
 namespace GUI
 {
+    /*
+     * ILISTA TANAN SA LIST BOX ANG TANANG DATA POINTS SA TANANG SCENES SULOD SA USA KA .sc (SCENE FILE)
+     * NAAY BUTTON NA MERGE PARA I MERGE TANANG DATA POINTS PARA MAUSA ANG TANANG MATRIX SA TANANG SCENES
+     * 
+     */
     public partial class MainForm : Form
     {
         private static string? openedFileName;
         private static bool addDatapointIsActivated = false;
+        DataPoint? selectedDatapoint;
+        Scene? selectedScene;
 
         public MainForm()
         {
             InitializeComponent();
+        }
+
+        private void populateDatapoint()
+        {
+            if (Database.scenes == null) return;
+            ListBoxDatapoints.Items.Clear();
+            foreach(Scene scene in Database.scenes) 
+            {
+                foreach(DataPoint dp in scene.DataPoints) 
+                {
+                    ListBoxDatapoints.Items.Add(dp);
+                }
+            }
+        }
+
+        private void populateListBoxScenes()
+        {
+            if(Database.scenes == null) return;
+            ListBoxScenes.Items.Clear();
+            foreach(Scene scene in Database.scenes)
+            {
+                ListBoxScenes.Items.Add(scene);
+            }
         }
 
         private void addToolStripMenuItem_Click(object sender, EventArgs e)
@@ -23,19 +54,26 @@ namespace GUI
                 string name = Microsoft.VisualBasic.Interaction.InputBox("Enter a name: ", "Add a scene");
 
                 #pragma warning disable CS8602 // Dereference of a possibly null reference.
-                Database.scenes.Add(new Scene(Image.FromFile(ofd.FileName), name));
+
+                Scene newScene = new Scene(Image.FromFile(ofd.FileName), name);
+                Database.scenes.Add(newScene);
                 #pragma warning restore CS8602 // Dereference of a possibly null reference.
-                pictureBox1.Image = new Bitmap(Image.FromFile(ofd.FileName));
-                pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
-                pictureBox1.Visible = true;
-                listBox1.Visible = true;
-                listBox1.DataSource = Database.scenes;
-                listBox1.DisplayMember = "NAVI.Scene.Name";
-                pictureBox1.Visible = true;
-                panel2.Visible = true;
-                UndoButton.Visible = true;
-                DatapointButton.Visible = true;
-                ConnectButton.Visible = true;
+                selectedScene = newScene;
+                PictureBoxSceneImage.Image = selectedScene.SceneImage;
+                PictureBoxSceneImage.SizeMode = PictureBoxSizeMode.StretchImage;
+                PictureBoxSceneImage.Visible = true;
+                
+                ListBoxScenes.Visible = true;
+                populateListBoxScenes();
+                ListBoxDatapoints.Visible = true;
+                populateDatapoint();
+
+               /* listBox1.DataSource = Database.scenes;
+                listBox1.DisplayMember = "NAVI.Scene.Name";*/
+ 
+                PictureBoxSceneImage.Visible = true;
+                PanelListBox.Visible = true;
+                selectedScene = Database.scenes[Database.scenes.Count - 1];
             } 
         }
 
@@ -63,6 +101,41 @@ namespace GUI
             Database.Save(openedFileName);
         }
 
+        private void fillDataPoints() 
+        {
+            if (selectedScene == null) return;
+            Image i = new Bitmap(selectedScene.SceneImage);
+
+
+            //Image i = new Bitmap(selectedScene.SceneImage.Width, selectedScene.SceneImage.Height);
+            using (Graphics g = Graphics.FromImage(i))
+            {
+                //Brush brush = new SolidBrush(Color.Red);
+                //paints a red dot to all the DataPoints
+                foreach (DataPoint p in selectedScene.DataPoints)
+                {
+                    float scale = PictureBoxSceneImage.Width * 0.025f / 2;
+                    PointF corrected = new PointF(p.Location.X - scale, p.Location.Y - scale);
+                    if (p.IsMain)
+                    {
+                      
+                       // g.DrawString("x: " + p.Location.X.ToString() + "\ny: " + p.Location.Y, Font.Name, p.Location.X, p.Location.Y + 5);
+                        g.FillEllipse(Brushes.Red, new RectangleF(corrected, new SizeF(2*scale, 2*scale)));
+                        //g.DrawString("x: " + p.Location.X.ToString() + "\ny: " + p.Location.Y, font, Brushes.Black, p.Location.X, p.Location.Y + 5);
+                    }
+                    else
+                    {
+                        g.FillEllipse(Brushes.DarkGreen, new RectangleF(corrected, new SizeF(2 * scale, 2 * scale)));
+                        //g.DrawString("x: " + p.Location.X.ToString() + "\ny: " + p.Location.Y, font, Brushes.Black, p.Location.X, p.Location.Y + 5);
+                    }
+                       
+                }
+            }
+            //refreshes the image that is being displayed in the PictureBox
+            PictureBoxSceneImage.Image = i;
+        }
+        
+
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ofd.Filter = "Scene File (*.sc)|*.sc";
@@ -71,27 +144,37 @@ namespace GUI
                 string filename = ofd.FileName;
                 openedFileName = ofd.FileName;
                 Database.Load(filename);
-                listBox1.DataSource= Database.scenes;
-                listBox1.DisplayMember = "NAVI.Scene.Name";
-                pictureBox1.Visible = true;
-                panel2.Visible = true;
-                listBox1.Visible = true;
-                UndoButton.Visible = true;
-                DatapointButton.Visible = true;
-                ConnectButton.Visible = true;
+                if (Database.scenes == null) return;
+                MessageBox.Show("Success Open");
+                populateListBoxScenes();
+                ListBoxScenes.DisplayMember = "NAVI.Scene.Name";
+                selectedScene = Database.scenes[0];
+                PictureBoxSceneImage.Image = selectedScene.SceneImage;
+                PictureBoxSceneImage.SizeMode = PictureBoxSizeMode.StretchImage;
+                PictureBoxSceneImage.Visible = true;
+                fillDataPoints();
+                PanelListBox.Visible = true;
+                ListBoxScenes.Visible = true;
+
+                ListBoxDatapoints.Visible = true;
+                populateDatapoint();
+
+                foreach (Scene scene in Database.scenes)
+                {
+                    MenuItemFileSceneView.DropDownItems.Add(scene.Name);
+                }
             }
         }
         private void pictureBox1_MouseClick(object sender, MouseEventArgs e)
         {
-            Scene? selectedScene = listBox1.SelectedItem as Scene;
-
             if (selectedScene == null || !addDatapointIsActivated) return;
 
+            MessageBox.Show("Click!");
             //calculates the ratio of the PictureBox width and the Image width
-            float scaleX = (float)pictureBox1.Width / pictureBox1.Image.Width;
+            float scaleX = (float)PictureBoxSceneImage.Width / PictureBoxSceneImage.Image.Width;
 
             //calculates the ratio of the PictureBox height and the Image height
-            float scaleY = (float)pictureBox1.Height / pictureBox1.Image.Height;
+            float scaleY = (float)PictureBoxSceneImage.Height / PictureBoxSceneImage.Image.Height;
 
             //location of the click event with respect to the image's pixels instead of the PictureBox 
             float x_location = (float)e.X / scaleX;
@@ -111,14 +194,14 @@ namespace GUI
             //MessageBox.Show(e.Location.ToString());
 
             //creation of the new DataPoint objects
-            DataPoint dp = new DataPoint(click, name, result == DialogResult.Yes);
+            DataPoint dp = new DataPoint(click, name, result == DialogResult.Yes, selectedScene);
 
             //add the new DataPoint to the list of DataPoints
             #pragma warning disable CS8602 // Dereference of a possibly null reference.
             selectedScene.DataPoints.Add(dp);
             #pragma warning restore CS8602 // Dereference of a possibly null reference.
 
-            pictureBox1.Image = selectedScene.SceneImage;
+            PictureBoxSceneImage.Image = selectedScene.SceneImage;
 
             Image i = new Bitmap(selectedScene.SceneImage);
             Font font = new Font("Arial", 6);
@@ -131,25 +214,26 @@ namespace GUI
                 //paints a red dot to all the DataPoints
                 foreach (DataPoint p in selectedScene.DataPoints)
                 {
-                    float scale = pictureBox1.Width * 0.025f / 2;
+                    float scale = PictureBoxSceneImage.Width * 0.025f / 2;
                     PointF corrected = new PointF(p.Location.X - scale, p.Location.Y - scale);
                     if (p.IsMain)
                     {
                       
                        // g.DrawString("x: " + p.Location.X.ToString() + "\ny: " + p.Location.Y, Font.Name, p.Location.X, p.Location.Y + 5);
                         g.FillEllipse(Brushes.Red, new RectangleF(corrected, new SizeF(2*scale, 2*scale)));
-                        g.DrawString("x: " + p.Location.X.ToString() + "\ny: " + p.Location.Y, font, Brushes.Black, p.Location.X, p.Location.Y + 5);
+                       // g.DrawString("x: " + p.Location.X.ToString() + "\ny: " + p.Location.Y, font, Brushes.Black, p.Location.X, p.Location.Y + 5);
                     }
                     else
                     {
                         g.FillEllipse(Brushes.DarkGreen, new RectangleF(corrected, new SizeF(2 * scale, 2 * scale)));
-                        g.DrawString("x: " + p.Location.X.ToString() + "\ny: " + p.Location.Y, font, Brushes.Black, p.Location.X, p.Location.Y + 5);
+                        //g.DrawString("x: " + p.Location.X.ToString() + "\ny: " + p.Location.Y, font, Brushes.Black, p.Location.X, p.Location.Y + 5);
                     }
                        
                 }
             }
             //refreshes the image that is being displayed in the PictureBox
-            pictureBox1.Image = i;
+            PictureBoxSceneImage.Image = i;
+            populateDatapoint();
         }
 
         private void scenesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -159,96 +243,134 @@ namespace GUI
              * User can select a Scene in the list of Scenes
              */
             #pragma warning disable CS8602 // Dereference of a possibly null reference.
-            if (Database.scenes.Count != 0)
-            {
-                listBox1.DataSource = Database.scenes;
-                listBox1.DisplayMember = "NAVI.Scene.Name";
-                listBox1.Visible = true;
-                panel2.Visible = true;
-            }
+            if (Database.scenes.Count <= 0) return;
+            
+            populateListBoxScenes();
+            ListBoxScenes.DisplayMember = "NAVI.Scene.Name";
+            ListBoxScenes.Visible = true;
+            ListBoxDatapoints.Visible = true;
+            populateDatapoint();
+            PanelListBox.Visible = true;
             #pragma warning restore CS8602 // Dereference of a possibly null reference.
         }
 
         private void listBox1_DoubleClick(object sender, EventArgs e)
         {
-            Scene? selectedScene = listBox1.SelectedItem as Scene;
-            if (selectedScene != null)
+            selectedScene = ListBoxScenes.SelectedItem as Scene;
+            if (selectedScene == null) return;
+    
+            MessageBox.Show("Selected new scene.");
+            ListBoxScenes.Visible = true;
+            populateListBoxScenes();
+            ListBoxDatapoints.Visible = true;
+            populateDatapoint();
+            PictureBoxSceneImage.Image = selectedScene.SceneImage;
+            PictureBoxSceneImage.SizeMode = PictureBoxSizeMode.StretchImage;
+            PictureBoxSceneImage.Visible = true;
+
+            Image i = new Bitmap(selectedScene.SceneImage);
+            Font font = new Font("Arial", 6);
+
+            //Image i = new Bitmap(selectedScene.SceneImage.Width, selectedScene.SceneImage.Height);
+            using (Graphics g = Graphics.FromImage(i))
             {
-                listBox1.Visible = true;
-                pictureBox1.Image = selectedScene.SceneImage;
-                pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
-                pictureBox1.Visible = true;
-                UndoButton.Visible = true;
-                DatapointButton.Visible = true;
-                ConnectButton.Visible = true;
-
-                Image i = new Bitmap(selectedScene.SceneImage);
-                Font font = new Font("Arial", 6);
-
-
-                //Image i = new Bitmap(selectedScene.SceneImage.Width, selectedScene.SceneImage.Height);
-                using (Graphics g = Graphics.FromImage(i))
+                //Brush brush = new SolidBrush(Color.Red);
+                //paints a red dot to all the DataPoints
+                foreach (DataPoint p in selectedScene.DataPoints)
                 {
-                    //Brush brush = new SolidBrush(Color.Red);
-                    //paints a red dot to all the DataPoints
-                    foreach (DataPoint p in selectedScene.DataPoints)
+                    float scale = PictureBoxSceneImage.Width * 0.025f / 2;
+                    PointF corrected = new PointF(p.Location.X - scale, p.Location.Y - scale);
+                    if (p.IsMain)
                     {
-                        float scale = pictureBox1.Width * 0.025f / 2;
-                        PointF corrected = new PointF(p.Location.X - scale, p.Location.Y - scale);
-                        if (p.IsMain)
-                        {
 
-                            // g.DrawString("x: " + p.Location.X.ToString() + "\ny: " + p.Location.Y, Font.Name, p.Location.X, p.Location.Y + 5);
-                            g.FillEllipse(Brushes.Red, new RectangleF(corrected, new SizeF(2 * scale, 2 * scale)));
-                            g.DrawString("x: " + p.Location.X.ToString() + "\ny: " + p.Location.Y, font, Brushes.Black, p.Location.X, p.Location.Y + 5);
-                        }
-                        else
-                        {
-                            g.FillEllipse(Brushes.DarkGreen, new RectangleF(corrected, new SizeF(2 * scale, 2 * scale)));
-                            g.DrawString("x: " + p.Location.X.ToString() + "\ny: " + p.Location.Y, font, Brushes.Black, p.Location.X, p.Location.Y + 5);
-                        }
-
+                        // g.DrawString("x: " + p.Location.X.ToString() + "\ny: " + p.Location.Y, Font.Name, p.Location.X, p.Location.Y + 5);
+                        g.FillEllipse(Brushes.Red, new RectangleF(corrected, new SizeF(2 * scale, 2 * scale)));
+                        //g.DrawString("x: " + p.Location.X.ToString() + "\ny: " + p.Location.Y, font, Brushes.Black, p.Location.X, p.Location.Y + 5);
+                    }
+                    else
+                    {
+                        g.FillEllipse(Brushes.DarkGreen, new RectangleF(corrected, new SizeF(2 * scale, 2 * scale)));
+                        //g.DrawString("x: " + p.Location.X.ToString() + "\ny: " + p.Location.Y, font, Brushes.Black, p.Location.X, p.Location.Y + 5);
                     }
                 }
-                //refreshes the image that is being displayed in the PictureBox
-                pictureBox1.Image = i;
             }
+            //refreshes the image that is being displayed in the PictureBox
+            PictureBoxSceneImage.Image = i;
         }
 
         private void dataPointsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Scene? selectedScene = listBox1.SelectedItem as Scene;
+            Scene? selectedScene = ListBoxScenes.SelectedItem as Scene;
             #pragma warning disable CS8602 // Dereference of a possibly null reference.
             if (selectedScene == null || selectedScene.DataPoints.Count <= 0) return;
 
-            listBox1.DataSource = selectedScene.DataPoints;
-            listBox1.DisplayMember = "NAVI.DataPoint.Name";
-            listBox1.Visible = true;
-            panel2.Visible = true;
-            UndoButton.Visible = true;
-            DatapointButton.Visible = true;
-            ConnectButton.Visible = true;
-        
+            ListBoxScenes.DataSource = selectedScene.DataPoints;
+            ListBoxScenes.DisplayMember = "NAVI.DataPoint.Name";
+            ListBoxScenes.Visible = true;
+            PanelListBox.Visible = true;
+            ListBoxDatapoints.Visible = true;
+            populateDatapoint();
             #pragma warning restore CS8602 // Dereference of a possibly null reference.
         }
 
-        private void DatapointButton_Click(object sender, EventArgs e)
+        
+        private void refresh()
         {
+            if (selectedScene == null) return;
+            Image i = new Bitmap(selectedScene.SceneImage);
+            Font font = new Font("Arial", 6);
+
+            //Image i = new Bitmap(selectedScene.SceneImage.Width, selectedScene.SceneImage.Height);
+            using (Graphics g = Graphics.FromImage(i))
+            {
+                //Brush brush = new SolidBrush(Color.Red);
+                //paints a red dot to all the DataPoints
+                foreach (DataPoint p in selectedScene.DataPoints)
+                {
+                    float scale = PictureBoxSceneImage.Width * 0.025f / 2;
+                    PointF corrected = new PointF(p.Location.X - scale, p.Location.Y - scale);
+                    if (p.IsMain)
+                    {
+
+                        // g.DrawString("x: " + p.Location.X.ToString() + "\ny: " + p.Location.Y, Font.Name, p.Location.X, p.Location.Y + 5);
+                        g.FillEllipse(Brushes.Red, new RectangleF(corrected, new SizeF(2 * scale, 2 * scale)));
+                        //g.DrawString("x: " + p.Location.X.ToString() + "\ny: " + p.Location.Y, font, Brushes.Black, p.Location.X, p.Location.Y + 5);
+                    }
+                    else
+                    {
+                        g.FillEllipse(Brushes.DarkGreen, new RectangleF(corrected, new SizeF(2 * scale, 2 * scale)));
+                        //g.DrawString("x: " + p.Location.X.ToString() + "\ny: " + p.Location.Y, font, Brushes.Black, p.Location.X, p.Location.Y + 5);
+                    }
+                }
+            }
+            //refreshes the image that is being displayed in the PictureBox
+            PictureBoxSceneImage.Image = i;/*
+            ListBoxScenes.Items.Clear();
+            ListBoxScenes.DataSource = selectedScene.DataPoints;
+            ListBoxScenes.DisplayMember = "NAVI.DataPoint.Name";*/
+            ListBoxDatapoints.Visible = true;
+            populateDatapoint();
+        }
+        private void addToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            if(selectedScene == null) return;
             if (addDatapointIsActivated)
             {
                 addDatapointIsActivated = false;
-                DatapointButton.BackColor = DefaultBackColor;
+                MenuItemAddDatapoint.Checked = false;
+                MessageBox.Show("Success. Add deactivated");
             }
             else
             {
                 addDatapointIsActivated = true;
-                DatapointButton.BackColor = Color.Yellow;
+                MenuItemAddDatapoint.Checked = true;
+                MessageBox.Show("Success. Add activated");
             }
         }
 
-        private void UndoButton_Click(object sender, EventArgs e)
+        private void removeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Scene? selectedScene = listBox1.SelectedItem as Scene;
+            /*Scene? selectedScene = listBox1.SelectedItem as Scene;
             if (selectedScene == null || selectedScene.DataPoints.Count <= 0) return;
 
             Image i = new Bitmap(selectedScene.SceneImage);
@@ -280,7 +402,110 @@ namespace GUI
                 }
             }
             //refreshes the image that is being displayed in the PictureBox
-            pictureBox1.Image = i;
+            pictureBox1.Image = i;*/
+            
+            foreach(object o in ListBoxScenes.SelectedItems)
+            {
+                if (o is DataPoint)
+                {
+                    selectedScene.DataPoints.Remove(o as DataPoint);
+                    
+                }
+            }
+            this.refresh();
+            
         }
+
+        private void connectToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (selectedScene == null || !selectedScene.DatapointsCommited) return;
+            if (ListBoxDatapoints.SelectedItems.Count != 2) return;
+            // if (ListBoxDatapoints.SelectedItems[0].FromScene != ListBoxDatapoints.SelectedItems[1].FromScene) return;
+            DataPoint from = (DataPoint)ListBoxDatapoints.SelectedItems[0];
+            DataPoint to= (DataPoint)ListBoxDatapoints.SelectedItems[1];
+            if(from == null || to == null) return;
+            if (from.FromScene != to.FromScene) return;
+
+            string input = Microsoft.VisualBasic.Interaction.InputBox("Enter distance from "+ from.Name + " to " + to.Name + " in meters." , "Distance");
+            double distance;
+            if(!double.TryParse(input, out distance))
+            {
+                MessageBox.Show("Invalid input");
+                return;
+            }
+
+            DialogResult result = MessageBox.Show("Is this a directed edge?", "Distance", MessageBoxButtons.YesNoCancel);
+            if (result == DialogResult.Cancel) return;
+            selectedScene.Matrix[selectedScene.DataPoints.IndexOf(from), selectedScene.DataPoints.IndexOf(to)] = distance;
+            if (result  == DialogResult.No)
+                selectedScene.Matrix[selectedScene.DataPoints.IndexOf(to), selectedScene.DataPoints.IndexOf(from)] = distance;
+
+            string output = $"Connecting {from.Name} and {to.Name} with distance {distance} meters. {(result == DialogResult.Yes ? "Directed": "Undirected.")}";
+            MessageBox.Show(output);
+
+        }
+
+        private void ListBoxScenes_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            selectedScene = (Scene)ListBoxScenes.SelectedItem;
+            MessageBox.Show("Index changed");
+            if (selectedScene == null) return;
+
+            MessageBox.Show("Selected new scene.");
+            ListBoxScenes.Visible = true;
+            populateListBoxScenes();
+            ListBoxDatapoints.Visible = true;
+            populateDatapoint();
+            PictureBoxSceneImage.Image = selectedScene.SceneImage;
+            PictureBoxSceneImage.SizeMode = PictureBoxSizeMode.StretchImage;
+            PictureBoxSceneImage.Visible = true;
+
+            Image i = new Bitmap(selectedScene.SceneImage);
+            Font font = new Font("Arial", 6);
+
+            //Image i = new Bitmap(selectedScene.SceneImage.Width, selectedScene.SceneImage.Height);
+            using (Graphics g = Graphics.FromImage(i))
+            {
+                //Brush brush = new SolidBrush(Color.Red);
+                //paints a red dot to all the DataPoints
+                foreach (DataPoint p in selectedScene.DataPoints)
+                {
+                    float scale = PictureBoxSceneImage.Width * 0.025f / 2;
+                    PointF corrected = new PointF(p.Location.X - scale, p.Location.Y - scale);
+                    if (p.IsMain)
+                    {
+
+                        // g.DrawString("x: " + p.Location.X.ToString() + "\ny: " + p.Location.Y, Font.Name, p.Location.X, p.Location.Y + 5);
+                        g.FillEllipse(Brushes.Red, new RectangleF(corrected, new SizeF(2 * scale, 2 * scale)));
+                        //g.DrawString("x: " + p.Location.X.ToString() + "\ny: " + p.Location.Y, font, Brushes.Black, p.Location.X, p.Location.Y + 5);
+                    }
+                    else
+                    {
+                        g.FillEllipse(Brushes.DarkGreen, new RectangleF(corrected, new SizeF(2 * scale, 2 * scale)));
+                        //g.DrawString("x: " + p.Location.X.ToString() + "\ny: " + p.Location.Y, font, Brushes.Black, p.Location.X, p.Location.Y + 5);
+                    }
+                }
+            }
+            //refreshes the image that is being displayed in the PictureBox
+            PictureBoxSceneImage.Image = i;
+        }
+
+        private void ListBoxDatapoints_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            selectedDatapoint = (DataPoint)ListBoxDatapoints.SelectedItem;
+            MessageBox.Show("Index changed");
+            if (selectedDatapoint == null) return;
+            if (ListBoxDatapoints.SelectedItems.Count != 2) return;
+
+        }
+
+        private void commitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(selectedScene == null) return;
+            selectedScene.InitPaths();
+            MessageBox.Show($"Initializing {selectedScene.DataPoints.Count} by {selectedScene.DataPoints.Count} matrix");
+        }
+
+        
     }
 }

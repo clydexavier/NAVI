@@ -19,7 +19,8 @@ namespace NAVI
         public Image SceneImage { get; set; }
         public byte[]? ImageData;
         public List<DataPoint> DataPoints;
-        public double[,]? Paths;
+        public double[,]? Matrix;
+        public bool DatapointsCommited;
 
         public Scene(Image scene_image, string name)
         {
@@ -27,18 +28,20 @@ namespace NAVI
             this.SceneImage = scene_image;
             this.ImageData = null;
             this.DataPoints = new List<DataPoint>();
+            this.DatapointsCommited = false;
         }
 
         public void InitPaths()
         {
-            this.Paths = new double[DataPoints.Count, DataPoints.Count];
+            this.Matrix = new double[DataPoints.Count, DataPoints.Count];
             for(int i = 0; i < DataPoints.Count; i++) 
             {
                 for(int j = 0; j < DataPoints.Count; j++)
                 {
-                    this.Paths[i, j] = i == j ? 0 : -1;     
+                    this.Matrix[i, j] = i == j ? 0 : -1;     
                 }
             }
+            this.DatapointsCommited = true;
         }
 
         public override string ToString()
