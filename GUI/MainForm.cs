@@ -23,12 +23,13 @@ namespace GUI
         private void populateDatapoint()
         {
             if (Database.scenes == null) return;
-            ListBoxDatapoints.Items.Clear();
+            //ListBoxDatapoints.Items.Clear();
+            CheckedListBoxDatapoints.Items.Clear();
             foreach(Scene scene in Database.scenes) 
             {
                 foreach(DataPoint dp in scene.DataPoints) 
                 {
-                    ListBoxDatapoints.Items.Add(dp);
+                    CheckedListBoxDatapoints.Items.Add(dp);
                 }
             }
         }
@@ -65,7 +66,7 @@ namespace GUI
                 
                 ListBoxScenes.Visible = true;
                 populateListBoxScenes();
-                ListBoxDatapoints.Visible = true;
+                CheckedListBoxDatapoints.Visible = true;
                 populateDatapoint();
 
                /* listBox1.DataSource = Database.scenes;
@@ -156,7 +157,7 @@ namespace GUI
                 PanelListBox.Visible = true;
                 ListBoxScenes.Visible = true;
 
-                ListBoxDatapoints.Visible = true;
+                CheckedListBoxDatapoints.Visible = true;
                 populateDatapoint();
 
                 foreach (Scene scene in Database.scenes)
@@ -248,7 +249,7 @@ namespace GUI
             populateListBoxScenes();
             ListBoxScenes.DisplayMember = "NAVI.Scene.Name";
             ListBoxScenes.Visible = true;
-            ListBoxDatapoints.Visible = true;
+            CheckedListBoxDatapoints.Visible = true;
             populateDatapoint();
             PanelListBox.Visible = true;
             #pragma warning restore CS8602 // Dereference of a possibly null reference.
@@ -262,7 +263,7 @@ namespace GUI
             MessageBox.Show("Selected new scene.");
             ListBoxScenes.Visible = true;
             populateListBoxScenes();
-            ListBoxDatapoints.Visible = true;
+            CheckedListBoxDatapoints.Visible = true;
             populateDatapoint();
             PictureBoxSceneImage.Image = selectedScene.SceneImage;
             PictureBoxSceneImage.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -308,7 +309,7 @@ namespace GUI
             ListBoxScenes.DisplayMember = "NAVI.DataPoint.Name";
             ListBoxScenes.Visible = true;
             PanelListBox.Visible = true;
-            ListBoxDatapoints.Visible = true;
+            CheckedListBoxDatapoints.Visible = true;
             populateDatapoint();
             #pragma warning restore CS8602 // Dereference of a possibly null reference.
         }
@@ -348,7 +349,7 @@ namespace GUI
             ListBoxScenes.Items.Clear();
             ListBoxScenes.DataSource = selectedScene.DataPoints;
             ListBoxScenes.DisplayMember = "NAVI.DataPoint.Name";*/
-            ListBoxDatapoints.Visible = true;
+            CheckedListBoxDatapoints.Visible = true;
             populateDatapoint();
         }
         private void addToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -419,12 +420,17 @@ namespace GUI
         private void connectToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (selectedScene == null || !selectedScene.DatapointsCommited) return;
-            if (ListBoxDatapoints.SelectedItems.Count != 2) return;
+            MessageBox.Show("Selected scene not null. Datapoints commited");
+            if (CheckedListBoxDatapoints.CheckedItems.Count != 2) return;
+            MessageBox.Show("Checked Items 2");
             // if (ListBoxDatapoints.SelectedItems[0].FromScene != ListBoxDatapoints.SelectedItems[1].FromScene) return;
-            DataPoint from = (DataPoint)ListBoxDatapoints.SelectedItems[0];
-            DataPoint to= (DataPoint)ListBoxDatapoints.SelectedItems[1];
+            DataPoint from = (DataPoint)CheckedListBoxDatapoints.CheckedItems[0];
+            DataPoint to= (DataPoint)CheckedListBoxDatapoints.CheckedItems[1];
             if(from == null || to == null) return;
+            MessageBox.Show("Checked items not null");
+
             if (from.FromScene != to.FromScene) return;
+            MessageBox.Show("Datapoints from same scene");
 
             string input = Microsoft.VisualBasic.Interaction.InputBox("Enter distance from "+ from.Name + " to " + to.Name + " in meters." , "Distance");
             double distance;
@@ -454,7 +460,7 @@ namespace GUI
             MessageBox.Show("Selected new scene.");
             ListBoxScenes.Visible = true;
             populateListBoxScenes();
-            ListBoxDatapoints.Visible = true;
+            CheckedListBoxDatapoints.Visible = true;
             populateDatapoint();
             PictureBoxSceneImage.Image = selectedScene.SceneImage;
             PictureBoxSceneImage.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -490,14 +496,7 @@ namespace GUI
             PictureBoxSceneImage.Image = i;
         }
 
-        private void ListBoxDatapoints_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            selectedDatapoint = (DataPoint)ListBoxDatapoints.SelectedItem;
-            MessageBox.Show("Index changed");
-            if (selectedDatapoint == null) return;
-            if (ListBoxDatapoints.SelectedItems.Count != 2) return;
-
-        }
+        
 
         private void commitToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -506,6 +505,12 @@ namespace GUI
             MessageBox.Show($"Initializing {selectedScene.DataPoints.Count} by {selectedScene.DataPoints.Count} matrix");
         }
 
-        
+        private void CheckedListBoxDatapoints_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            if(CheckedListBoxDatapoints.CheckedItems.Count == 2 && e.NewValue == CheckState.Checked)
+            {
+                e.NewValue = e.CurrentValue;
+            }
+        }
     }
 }

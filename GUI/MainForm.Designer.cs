@@ -31,7 +31,7 @@
             this.PanelImage = new System.Windows.Forms.Panel();
             this.PictureBoxSceneImage = new System.Windows.Forms.PictureBox();
             this.PanelListBox = new System.Windows.Forms.Panel();
-            this.ListBoxDatapoints = new System.Windows.Forms.ListBox();
+            this.CheckedListBoxDatapoints = new System.Windows.Forms.CheckedListBox();
             this.ListBoxScenes = new System.Windows.Forms.ListBox();
             this.MenuStrip = new System.Windows.Forms.MenuStrip();
             this.MenuItemFile = new System.Windows.Forms.ToolStripMenuItem();
@@ -48,7 +48,7 @@
             this.MenuItemAddDatapoint = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuItemDatapointsRemove = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuItemConnectDatapoint = new System.Windows.Forms.ToolStripMenuItem();
-            this.commitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuItemDatapointsConnect = new System.Windows.Forms.ToolStripMenuItem();
             this.ofd = new System.Windows.Forms.OpenFileDialog();
             this.sfd = new System.Windows.Forms.SaveFileDialog();
             this.PanelImage.SuspendLayout();
@@ -82,7 +82,7 @@
             // 
             // PanelListBox
             // 
-            this.PanelListBox.Controls.Add(this.ListBoxDatapoints);
+            this.PanelListBox.Controls.Add(this.CheckedListBoxDatapoints);
             this.PanelListBox.Controls.Add(this.ListBoxScenes);
             this.PanelListBox.Dock = System.Windows.Forms.DockStyle.Right;
             this.PanelListBox.Location = new System.Drawing.Point(534, 24);
@@ -90,18 +90,16 @@
             this.PanelListBox.Size = new System.Drawing.Size(240, 423);
             this.PanelListBox.TabIndex = 2;
             // 
-            // ListBoxDatapoints
+            // CheckedListBoxDatapoints
             // 
-            this.ListBoxDatapoints.Dock = System.Windows.Forms.DockStyle.Right;
-            this.ListBoxDatapoints.FormattingEnabled = true;
-            this.ListBoxDatapoints.ItemHeight = 15;
-            this.ListBoxDatapoints.Location = new System.Drawing.Point(1, 0);
-            this.ListBoxDatapoints.Name = "ListBoxDatapoints";
-            this.ListBoxDatapoints.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.ListBoxDatapoints.Size = new System.Drawing.Size(120, 423);
-            this.ListBoxDatapoints.TabIndex = 6;
-            this.ListBoxDatapoints.Visible = false;
-            this.ListBoxDatapoints.SelectedIndexChanged += new System.EventHandler(this.ListBoxDatapoints_SelectedIndexChanged);
+            this.CheckedListBoxDatapoints.Dock = System.Windows.Forms.DockStyle.Right;
+            this.CheckedListBoxDatapoints.FormattingEnabled = true;
+            this.CheckedListBoxDatapoints.Location = new System.Drawing.Point(1, 0);
+            this.CheckedListBoxDatapoints.Name = "CheckedListBoxDatapoints";
+            this.CheckedListBoxDatapoints.Size = new System.Drawing.Size(120, 423);
+            this.CheckedListBoxDatapoints.TabIndex = 6;
+            this.CheckedListBoxDatapoints.Visible = false;
+            this.CheckedListBoxDatapoints.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.CheckedListBoxDatapoints_ItemCheck);
             // 
             // ListBoxScenes
             // 
@@ -212,7 +210,7 @@
             this.MenuItemAddDatapoint,
             this.MenuItemDatapointsRemove,
             this.MenuItemConnectDatapoint,
-            this.commitToolStripMenuItem});
+            this.MenuItemDatapointsConnect});
             this.MenuItemDatapoints.Name = "MenuItemDatapoints";
             this.MenuItemDatapoints.Size = new System.Drawing.Size(76, 20);
             this.MenuItemDatapoints.Text = "Datapoints";
@@ -238,12 +236,12 @@
             this.MenuItemConnectDatapoint.Text = "Connect";
             this.MenuItemConnectDatapoint.Click += new System.EventHandler(this.connectToolStripMenuItem_Click);
             // 
-            // commitToolStripMenuItem
+            // MenuItemDatapointsConnect
             // 
-            this.commitToolStripMenuItem.Name = "commitToolStripMenuItem";
-            this.commitToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
-            this.commitToolStripMenuItem.Text = "Commit";
-            this.commitToolStripMenuItem.Click += new System.EventHandler(this.commitToolStripMenuItem_Click);
+            this.MenuItemDatapointsConnect.Name = "MenuItemDatapointsConnect";
+            this.MenuItemDatapointsConnect.Size = new System.Drawing.Size(119, 22);
+            this.MenuItemDatapointsConnect.Text = "Commit";
+            this.MenuItemDatapointsConnect.Click += new System.EventHandler(this.commitToolStripMenuItem_Click);
             // 
             // ofd
             // 
@@ -292,7 +290,7 @@
         private ToolStripMenuItem MenuItemDatapointsRemove;
         private ToolStripMenuItem MenuItemConnectDatapoint;
         private ToolStripMenuItem MenuItemFileSceneView;
-        private ListBox ListBoxDatapoints;
-        private ToolStripMenuItem commitToolStripMenuItem;
+        private ToolStripMenuItem MenuItemDatapointsConnect;
+        private CheckedListBox CheckedListBoxDatapoints;
     }
 }
