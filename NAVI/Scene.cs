@@ -44,6 +44,12 @@ namespace NAVI
             this.DatapointsCommited = true;
         }
 
+        public void Uncommit()
+        {
+            this.Matrix = null;
+            this.DatapointsCommited = false;
+        }
+
         public override string ToString()
         {
             return this.Name; 

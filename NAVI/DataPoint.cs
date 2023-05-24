@@ -7,9 +7,9 @@ namespace NAVI
         public PointF Location { get; set; }
         public string Name { get; set; }
         public bool IsMain { get; set; }
-        public Scene FromScene { get; set; }
+        public string FromScene { get; set; }
 
-        public DataPoint(PointF location, string name, bool isMain, Scene fromScene)
+        public DataPoint(PointF location, string name, bool isMain, string fromScene)
         {
             this.Location = location;
             this.Name = name;
